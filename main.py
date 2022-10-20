@@ -35,17 +35,24 @@ r_i=pm[:,[3]]
 d_i=pm[:,[0,1]]
 ab=np.array([0,0])
 (acclTime,bodyFactor,F,delta)=(0.5,120000,2000,0.08*50)
-for j in range(1,1):
+
+
+for j in range(0,1):
     r_ij=r_i+r_i[j]
     d_ij=d_i-d_i[j]
+    d_ij[j]+=[-100,-100]
     # d_ij[0]+=[1,1]
     mod_d_ij=np.array([magnitude(x) for x in d_ij]).reshape([nr_agents,1])
     e_ij=np.divide(d_ij.T.astype(float),np.array([magnitude(x) for x in d_ij]))
-    print(e_ij)
+    e_ij=e_ij.T
+    
+
     # d_ij=np.array([magnitude(x) for x in d_ij])
     # d_ij=d_ij.reshape([nr_agents,1])
     # e_ij=e_ij.reshape([nr_agents,2])
-    # ab=(F*np.exp((r_ij-d_ij)/(delta))*e_ij+bodyFactor*g(r_ij-d_ij)*e_ij)
+    exp_factor=(r_ij-mod_d_ij).astype(float)
+    force_matrix=(F*np.exp(exp_factor/delta)*e_ij+bodyFactor*g(exp_factor)*e_ij)
+    people_interaction=sum(force_matrix)
     
     
 def agent_matrix():
@@ -88,20 +95,20 @@ def position_update(pos_mat,timer):
 WHITE = (255,255,255);RED = (255,0,0);GREEN = (0,255,0);BLACK = (0,0,0)
 background_color = WHITE;agent_color = GREEN;line_color = BLACK
 
-# roomscreen = pygame.display.set_mode((800,800))
-# roomscreen.fill(background_color)
-# agents=agent_matrix()
+roomscreen = pygame.display.set_mode((800,800))
+roomscreen.fill(background_color)
+agents=agent_matrix()
 pos_mat=[];timer=0;
 # pygame.display.update()
 a=time.time()
 # while True:
-# for i in range(1):
+for i in range(1):
 #     if len(agents)==1: 
 #         print(time.time()-a)
 #         break;
-    # roomscreen.fill(background_color)
-    # draw_walls()
-    # position_update(pos_mat,timer)
+    roomscreen.fill(background_color)
+    draw_walls()
+    position_update(pos_mat,timer)
 # for i in pos_mat:
     # print(i)
 pygame.quit()
