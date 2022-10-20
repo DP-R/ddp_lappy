@@ -3,7 +3,7 @@
 def magnitude(vector):
     return math.sqrt(sum(pow(element, 2) for element in vector))
 from init_func import *
-from init_matrix_sep18 import walls,nr_agents, nr_experiments
+from init_matrix import walls,nr_agents, nr_experiments
   
 # from init_matrix import positionmatrix
 with open('init_matrix_data.pkl', 'rb') as file:    positionmatrix = pickle.load(file)
