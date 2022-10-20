@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
 
-# -*- coding: utf-8 -*-
 
 def magnitude(vector):
     return math.sqrt(sum(pow(element, 2) for element in vector))
 from init_func import *
-from init_matrix import walls,nr_agents, nr_experiments
+from init_matrix_sep18 import walls,nr_agents, nr_experiments
   
 # from init_matrix import positionmatrix
 with open('init_matrix_data.pkl', 'rb') as file:    positionmatrix = pickle.load(file)
 pm=np.array(positionmatrix)
+
 class Agent(object):
     def __init__(self,pos,mass,radius,dSpeed,dest):
         (self.pos,self.mass,self.radius,self.dSpeed,self.dest)=(pos,mass,radius,dSpeed,dest)
@@ -32,17 +31,21 @@ class Agent(object):
         d_iw,e_iw = distance_agent_to_wall(self.pos,wall)
         return -self.F*np.exp((r_i-d_iw)/self.delta)*e_iw+self.bodyFactor*g(r_i-d_iw)*e_iw
 
-r_i=pm[:,[2]]
-d_i=pm[:,[0]]
+r_i=pm[:,[3]]
+d_i=pm[:,[0,1]]
 ab=np.array([0,0])
 (acclTime,bodyFactor,F,delta)=(0.5,120000,2000,0.08*50)
-for j in range(len(r_i)):
+for j in range(1,1):
     r_ij=r_i+r_i[j]
     d_ij=d_i-d_i[j]
-    e_ij=np.divide(d_ij.T,np.array([magnitude(np.linalg.norm(x)) for x in d_ij]))
-    d_ij=np.array([magnitude(np.linalg.norm(x)) for x in d_ij])
-    d_ij=d_ij.reshape([nr_agents,1])
-    ab=(F*np.exp((r_ij.astype(float)-d_ij)/(delta))*e_ij+bodyFactor*g(r_ij.astype(float)-d_ij)*e_ij)
+    # d_ij[0]+=[1,1]
+    mod_d_ij=np.array([magnitude(x) for x in d_ij]).reshape([nr_agents,1])
+    e_ij=np.divide(d_ij.T.astype(float),np.array([magnitude(x) for x in d_ij]))
+    print(e_ij)
+    # d_ij=np.array([magnitude(x) for x in d_ij])
+    # d_ij=d_ij.reshape([nr_agents,1])
+    # e_ij=e_ij.reshape([nr_agents,2])
+    # ab=(F*np.exp((r_ij-d_ij)/(delta))*e_ij+bodyFactor*g(r_ij-d_ij)*e_ij)
     
     
 def agent_matrix():
@@ -87,19 +90,19 @@ background_color = WHITE;agent_color = GREEN;line_color = BLACK
 
 # roomscreen = pygame.display.set_mode((800,800))
 # roomscreen.fill(background_color)
-agents=agent_matrix()
+# agents=agent_matrix()
 pos_mat=[];timer=0;
 # pygame.display.update()
 a=time.time()
 # while True:
-for i in range(1):
-    if len(agents)==1: 
-        print(time.time()-a)
-        break;
+# for i in range(1):
+#     if len(agents)==1: 
+#         print(time.time()-a)
+#         break;
     # roomscreen.fill(background_color)
     # draw_walls()
-    position_update(pos_mat,timer)
-for i in pos_mat:
-    print(i)
+    # position_update(pos_mat,timer)
+# for i in pos_mat:
+    # print(i)
 pygame.quit()
 os.system('spd-say "done"')
