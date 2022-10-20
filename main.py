@@ -16,7 +16,6 @@ walls=[[lb[0],lb[1],rb[0],rb[1]  ],
        [rb[0],rb[1],rb[0],exit[0]],
        [rt[0],rt[1],rt[0],exit[1]]]
 
-
 def normalize(v):
     norm=np.linalg.norm(v)
     if norm==0:
@@ -45,41 +44,42 @@ def distance_agent_to_wall(point, wall):
     return dist,npw
 
 random.seed(123)
-nr_agents=50
+nr_agents=100
 nr_experiments=10
-positionmatrix=[]
-for j in range(0,nr_experiments):
-    agents_found=0
-    
-    for i in range(0,nr_agents):
-        found=False;countwall=0;
+def init_random_pos():
+    positionmatrix=[]
+    for j in range(0,nr_experiments):
+        agents_found=0
         
-        while found==False:
-            countwall=0; desiredS=15; mass=80; radius=12/80*mass;
-            dest=np.array([700,400])
+        for i in range(0,nr_agents):
+            found=False;countwall=0;
+            
+            while found==False:
+                countwall=0; 
+                desiredS=20; mass=80; radius=12/80*mass;dest=np.array([700,400])
 
-            object_x=np.random.uniform(100,700);object_y=np.random.uniform(100,700);
-            pos=np.array([object_x,object_y])
+                object_x=np.random.uniform(100,700);object_y=np.random.uniform(100,700);
+                pos=np.array([object_x,object_y])
 
-            # for wall in walls:
-            #     r_i=radius
-            #     d_iw,e_iw=distance_agent_to_wall(pos,wall)
-                
-            #     if d_iw<r_i:
-            #         countwall+=1
-            # if len([positionmatrix[i] for i in range(j*nr_agents,j*nr_agents + agents_found)])>0:
-            #     countagents=0
-            #     for position in [positionmatrix[i] for i in range(j*nr_agents,j*nr_agents + agents_found)]:
-            #         dist=math.sqrt((position[0]-object_x)**2 + (position[1]-object_y)**2)
-            #         if dist>position[2]+radius:
-            #             countagents +=1
-            #         if countagents==i and countwall==0:
-            #             found=True; agents_found+=1;
-            # elif countwall==0:
-            #     found=True; agents_found+=1;
-            found=True;agents_found+=1;
-        positionmatrix.append([pos, mass, radius, desiredS, dest, j+1])
-
+                for wall in walls:
+                    r_i=radius
+                    d_iw,e_iw=distance_agent_to_wall(pos,wall)
+                    
+                    if d_iw<r_i:
+                        countwall+=1
+                if len([positionmatrix[i] for i in range(j*nr_agents,j*nr_agents + agents_found)])>0:
+                    countagents=0
+                    for param in [positionmatrix[i] for i in range(j*nr_agents,j*nr_agents + agents_found)]:
+                        dist=math.sqrt((param[0][0]-object_x)**2 + (param[0][1]-object_y)**2)
+                        if dist>param[2]+radius:
+                            countagents +=1
+                        if countagents==i and countwall==0:
+                            found=True; agents_found+=1;
+                elif countwall==0:
+                    found=True; agents_found+=1;
+                # found=True;agents_found+=1;
+            positionmatrix.append([pos, mass, radius, desiredS, dest, j+1])
+    return positionmatrix
 class Agent(object):
     def __init__(self,pos,mass,radius,dSpeed,dest):
         self.pos=pos
@@ -93,7 +93,7 @@ class Agent(object):
         self.dVelocity=self.dSpeed*self.direction
 
         self.acclTime=0.5
-        self.bodyFactor=120000
+        self.bodyFactor=1200
         self.F=2000
         self.delta=4
     def velocity_force(self):
@@ -111,19 +111,18 @@ class Agent(object):
 def agent_matrix():
     agents=[]
     for i in range(nr_agents):
-        a=positionmatrix[j*nr_agents+i]
+        a=positionmatrix[i]
         agent=Agent(a[0],a[1],a[2],a[3],a[4])
         agents.append(agent)        
         # print(agent.direction,i)
     return agents
-agents=agent_matrix()
 
 def draw_walls():
     for wall in walls:
         pygame.draw.line(roomscreen,line_color,([wall[0],wall[1]]),([wall[2],wall[3]]),3)
         pygame.display.flip()
 
-def update_matrix():
+def position_update():
     roomscreen.fill(background_color)
     dt=0.1
     for agent_i in agents:
@@ -145,22 +144,19 @@ def update_matrix():
         pygame.draw.circle(roomscreen, agent_color, agent_i.pos, round(agent_i.radius), 3)
         pygame.draw.line(roomscreen, agent_color, agent_i.pos,agent_i.pos+10*agent_i.direction, 2)
 
-WHITE = (255,255,255)
-RED = (255,0,0)
-GREEN = (0,255,0)
-BLACK = (0,0,0)
-background_color = WHITE
-agent_color = GREEN
-line_color = BLACK
+WHITE = (255,255,255);RED = (255,0,0);GREEN = (0,255,0);BLACK = (0,0,0)
+background_color = WHITE;agent_color = GREEN;line_color = BLACK
 
 roomscreen = pygame.display.set_mode((800,800))
 roomscreen.fill(background_color)
+positionmatrix=init_random_pos()
+agents=agent_matrix()
 # pygame.display.update()
 
 for i in range(100):
     # roomscreen.fill(background_color)
     draw_walls()
-    update_matrix()
+    position_update()
 
 pygame.quit()
 os.system('spd-say "done"')
