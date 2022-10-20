@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from init_func import *
 from init_matrix import walls,nr_agents, nr_experiments
   
@@ -62,20 +64,20 @@ def position_update(pos_mat,timer):
         agent_i.pos+=agent_i.aVelocity*dt
         timer+=dt
         pos_mat.append([agent_i.pos,agent_i.mass,agent_i.radius,timer])
-        # pygame.draw.circle(roomscreen, agent_color, agent_i.pos, round(agent_i.radius), 3)
-        # pygame.draw.line(roomscreen, agent_color, agent_i.pos,agent_i.pos+10*agent_i.direction, 2)
+        pygame.draw.circle(roomscreen, agent_color, agent_i.pos, round(agent_i.radius), 3)
+        pygame.draw.line(roomscreen, agent_color, agent_i.pos,agent_i.pos+10*agent_i.direction, 2)
 
 WHITE = (255,255,255);RED = (255,0,0);GREEN = (0,255,0);BLACK = (0,0,0)
 background_color = WHITE;agent_color = GREEN;line_color = BLACK
 
 roomscreen = pygame.display.set_mode((800,800))
-# roomscreen.fill(background_color)
+roomscreen.fill(background_color)
 agents=agent_matrix()
 pos_mat=[];timer=0;
 pygame.display.update()
 a=time.time()
-while True:
-
+# while True:
+for i in range(100):
     if len(agents)==1: 
         print(time.time()-a)
         break;
@@ -83,6 +85,6 @@ while True:
     draw_walls()
     position_update(pos_mat,timer)
 for i in pos_mat:
-    print(i[3])
+    print(i)
 pygame.quit()
 os.system('spd-say "done"')
