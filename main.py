@@ -1,11 +1,10 @@
 import pygame
 from pygame.locals import *
-import sys
+import sys,os
 import numpy as np
 import numpy.random as random
 import math
 import time
-
 
 
 lt=[100,700];rt=[700,700];
@@ -125,7 +124,7 @@ def draw_walls():
         pygame.display.flip()
 
 def update_matrix():
-    # roomscreen.fill(background_color)
+    roomscreen.fill(background_color)
     dt=0.1
     for agent_i in agents:
         if agent_i.pos[0]>699 or agent_i.pos[0]<100:
@@ -143,12 +142,9 @@ def update_matrix():
         agent_i.aVelocity=agent_i.aVelocity+(aVelocity_force+people_interaction+wall_interaction)*dt/agent_i.mass
         agent_i.pos+=agent_i.aVelocity*dt
 
-        # pygame.draw.circle(roomscreen, agent_color, agent_i.pos, round(agent_i.radius), 3)
-        # pygame.draw.line(roomscreen, agent_color, agent_i.pos,agent_i.pos+10*agent_i.direction, 2)
-        # print((round(agent_i.radius)))
-        # cv2.circle(img,(int(agent_i.pos[0]),int(agent_i.pos[1])),round(agent_i.radius),agent_color,3)
-        cv2.imshow("img",img)
-        # cv2.waitKey(0)
+        pygame.draw.circle(roomscreen, agent_color, agent_i.pos, round(agent_i.radius), 3)
+        pygame.draw.line(roomscreen, agent_color, agent_i.pos,agent_i.pos+10*agent_i.direction, 2)
+
 WHITE = (255,255,255)
 RED = (255,0,0)
 GREEN = (0,255,0)
@@ -157,30 +153,14 @@ background_color = WHITE
 agent_color = GREEN
 line_color = BLACK
 
-# roomscreen = pygame.display.set_mode((800,800))
-# roomscreen.fill(background_color)
+roomscreen = pygame.display.set_mode((800,800))
+roomscreen.fill(background_color)
 # pygame.display.update()
 
-import cv2
-img=np.zeros([800,800,3],dtype=np.uint8)
-img.fill(255)
-iml=[]
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-video=cv2.VideoWriter('video.avi',fourcc,1,(800,800))
-# for i in range(10):
-    # img=cv2.circle(img,(100+10*i,100),20,(255,60,0),3)
-    # cv2.waitKey(0)
-# for i in range(10):
-    # cv2.imshow
-for i in range(10):
+for i in range(100):
     # roomscreen.fill(background_color)
-    # draw_walls()
+    draw_walls()
     update_matrix()
-    cv2.circle(img,(int(agent_i.pos[0]),int(agent_i.pos[1])),round(agent_i.radius),agent_color,3)
-    print('hi')
-    iml.append(img)
-    # cv2.imshow("img",img)
-    video.write(iml[i])
-video.release()
 
 pygame.quit()
+os.system('spd-say "done"')
