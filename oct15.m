@@ -3,7 +3,7 @@ pm=positionmatrix;
 pm=cell2mat(pm);
 
 acclTime=0.5;
-bodyFactor=120000;
+bodyFactor=12000;
 F=2000;
 delta=4;
 
