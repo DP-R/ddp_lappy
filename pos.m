@@ -1,9 +1,9 @@
 load('positionmatrix.mat')
 pm=positionmatrix;
 pm=cell2mat(pm);
-
+walls=double(walls);
 acclTime=0.5;
-bodyFactor=12000;
+bodyFactor=120000;
 F=2000;
 delta=4;
 

@@ -2,23 +2,48 @@
 
 from init_func import *
 import pickle
-lt=[0,12];rt=[12,12];
-lb=[0,0];rb=[12,0];
-ex=[6-0.5,6+0.5]
 
-lt=[x*50+100 for x in lt]
-lb=[x*50+100 for x in lb]
-rt=[x*50+100 for x in rt]
-rb=[x*50+100 for x in rb]
-ex=[x*50+100 for x in ex]
+def wall1():
 
-walls=[[lb[0],lb[1],rb[0],rb[1]  ],
-       [lb[0],lb[1],lt[0],lt[1]  ],
-       [lt[0],lt[1],rt[0],rt[1]  ],
-       [rb[0],rb[1],rb[0],ex[0]  ],
-       [rt[0],rt[1],rt[0],ex[1]  ]  ]
+    lt=[0,12];rt=[12,12];
+    lb=[0,0];rb=[12,0];
+    ex=[6-0.5,6+0.5]
 
-# print(walls)
+    lt=[x*50+100 for x in lt]
+    lb=[x*50+100 for x in lb]
+    rt=[x*50+100 for x in rt]
+    rb=[x*50+100 for x in rb]
+    ex=[x*50+100 for x in ex]
+
+    walls=[[lb[0],lb[1],rb[0],rb[1]  ],
+           [lb[0],lb[1],lt[0],lt[1]  ],
+           [lt[0],lt[1],rt[0],rt[1]  ],
+           [rb[0],rb[1],rb[0],ex[0]  ],
+           [rt[0],rt[1],rt[0],ex[1]  ]  ]
+    return walls
+
+def wall2():
+    room_height = 600 # height of the room
+    room_width = 600 # width of the room
+    room_left = 100 # left pixels coordinate
+    room_top = 100 # top pixels coordeinate
+
+    door_xtop = room_left
+    door_ytop = 382
+    door_xbottom = room_left
+    door_ybottom = 418
+
+    walls = [[room_left, room_top, room_left + room_width, room_top], 
+    [room_left, room_top, room_left, room_top + room_height],
+    [room_left, room_top+room_height, room_left + room_width, room_top+ room_height],
+    [660,375,660,425], [660,375,675,400], [675,400,660,425], # additional walls
+    [room_left + room_width, room_top, room_left + room_width, door_ytop],
+    [room_left+room_width, room_top + room_height, room_left + room_width, door_ybottom]]
+ 
+    return walls
+
+walls=wall2()
+
 random.seed(123)
 nr_agents=100
 nr_experiments=1
@@ -33,11 +58,11 @@ for j in range(0,nr_experiments):
      
      while found==False:
          countwall=0;
-         (desiredS,mass,radius,dest)=(20,80,12,np.array([rt[0],(ex[0]+ex[1])/2]))
+         (desiredS,mass,radius,dest)=(20,80,12,np.array([700,400]))
 
          # object_x=np.random.uniform(100,700);object_y=np.random.uniform(100,700);
          # pos=np.array([object_x,object_y])
-         pos=np.array([np.random.uniform(lb[0],rt[1]),np.random.uniform(lb[0],rt[1])])
+         pos=np.array([np.random.uniform(100,700),np.random.uniform(100,700)])
          for wall in walls:
              r_i=radius
              d_iw,e_iw=distance_agent_to_wall(pos,wall)

@@ -1,3 +1,43 @@
+def walltest():
+    room_height = 600 # height of the room
+    room_width = 600 # width of the room
+    room_left = 100 # left pixels coordinate
+    room_top = 100 # top pixels coordeinate
+
+    door_xtop = room_left
+    door_ytop = 382
+    door_xbottom = room_left
+    door_ybottom = 418
+
+    walls = [[room_left, room_top, room_left + room_width, room_top], 
+    [room_left, room_top, room_left, room_top + room_height],
+    [room_left, room_top+room_height, room_left + room_width, room_top+ room_height],
+    [660,375,660,425], [660,375,675,400], [675,400,660,425], # additional walls
+    [room_left + room_width, room_top, room_left + room_width, door_ytop],
+    [room_left+room_width, room_top + room_height, room_left + room_width, door_ybottom]]
+ 
+    return walls
+walltest()
+
+def wall1():
+
+    lt=[0,12];rt=[12,12];
+    lb=[0,0];rb=[12,0];
+    ex=[6-0.5,6+0.5]
+
+    lt=[x*50+100 for x in lt]
+    lb=[x*50+100 for x in lb]
+    rt=[x*50+100 for x in rt]
+    rb=[x*50+100 for x in rb]
+    ex=[x*50+100 for x in ex]
+
+    walls=[[lb[0],lb[1],rb[0],rb[1]  ],
+           [lb[0],lb[1],lt[0],lt[1]  ],
+           [lt[0],lt[1],rt[0],rt[1]  ],
+           [rb[0],rb[1],rb[0],ex[0]  ],
+           [rt[0],rt[1],rt[0],ex[1]  ]  ]
+    return walls
+a=wall1()
 def cvtest():
 	import numpy as np
 	import cv2
@@ -45,8 +85,9 @@ def scipysaver():
 	import scipy.io as sio
 	sio.savemat('a.mat',{'a':a})
 	
+from init_func import *
+
 def picklereader():
-	from init_func import *
 	from init_matrix import walls,nr_agents, nr_experiments
   
 # from init_matrix import positionmatrix
@@ -54,9 +95,9 @@ def picklereader():
 
 	a=np.array([[1,2,3],[2,3,4]])
 	
+from pygame.locals import*
 def pygame_tester():
 	import sys, pygame
-	from pygame.locals import*
 
 	width = 700
 	height = 700
