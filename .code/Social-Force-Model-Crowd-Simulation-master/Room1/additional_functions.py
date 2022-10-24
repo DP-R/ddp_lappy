@@ -31,4 +31,4 @@ def distance_agent_to_wall(point, wall):
     npw = normalize(cross-point)
     return dist,npw
 
-
+print(np.linalg.norm(np.array([1,10])-np.array([9,99])))

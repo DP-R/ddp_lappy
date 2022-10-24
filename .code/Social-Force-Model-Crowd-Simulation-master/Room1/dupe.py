@@ -194,7 +194,7 @@ def main():
     run = True
     
     # while run:
-    for ij in range(1000):
+    for ij in range(1):
         
         # Updating time
         if count < nr_agents - 2:

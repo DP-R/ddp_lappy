@@ -6,7 +6,7 @@ import numpy.random as random
 # Setting seed
 random.seed(123)
 # Creating a dataset
-nr_agents = 10
+nr_agents = 100
 nr_experiments = 1
 # Walls list to check
 room_height = 600 # height of the room
@@ -68,3 +68,6 @@ for j in range(0,nr_experiments):
                 agents_found += 1 
     
         positionmatrix.append([object_x, object_y, radius, mass, desiredS, nr_experiment])
+
+for i in positionmatrix:
+    print(i)

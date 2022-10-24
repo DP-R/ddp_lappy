@@ -63,11 +63,16 @@ def onepos(i):
     pygame.quit()
     os.system('spd-say "done"')
     # dt=0.05
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT or event.type== pygame.MOUSEBUTTONDOWN:
+            pygame.quit()
+            sys.exit()
 
 allpos()
 # onepos(1)
 # print(finalmat[11,:])
 
+ 
 
 # import cv2
 # img=np.zeros([800,800,3],dtype=np.uint8)
