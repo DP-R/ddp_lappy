@@ -2,7 +2,7 @@ def walltest():
     room_height = 600 # height of the room
     room_width = 600 # width of the room
     room_left = 100 # left pixels coordinate
-    room_top = 100 # top pixels coordeinate
+    room_top = 100 # top pixels coordinate
 
     door_xtop = room_left
     door_ytop = 382

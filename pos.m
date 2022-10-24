@@ -4,7 +4,7 @@ walls=double(walls);
 acclTime=0.5;
 bodyFactor=120000;
 F=2000;
-delta=4;
+delta=0.08*50;
 
 time=0;
 am=pm; am(:,[5,6,7,8])=0;
@@ -34,13 +34,13 @@ end
     wf=swf;
 for i=1:size(walls)
     [d_iw,e_iw]=test_walldistance(am(:,[1,2]),walls(i,:));
-    wf=wf-F.*exp((r_i-d_iw)/(delta)).*e_iw+bodyFactor.*max(r_i-d_iw,0).*e_iw;
+    wf=wf+F.*exp((r_i-d_iw)/(delta)).*e_iw+bodyFactor.*max(r_i-d_iw,0).*e_iw;
 
 end
     wf=wf.*am(:,9);
     swf=wf;    
 
-    dt=0.1;
+    dt=0.01;
     direc=znorm(pm(:,[6,7])-am(:,[1,2]));
 
     af=(pm(:,5).*direc-am(:,[5,6])).*pm(:,3)/acclTime;
@@ -81,7 +81,7 @@ function [dist,npw]=test_walldistance(point, wall)
         dist = zmod(a);
     end
     a=cross-point;
-    npw = a./zmod(a);
+    npw = -a./zmod(a);
 
 end
 
