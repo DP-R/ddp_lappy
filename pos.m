@@ -6,11 +6,12 @@ bodyFactor=120000;
 F=2000;
 delta=0.08*50;
 
+% negativewall=[700 375 700 425];
 time=0;
 am=pm; am(:,[5,6,7,8])=0;
 am(:,9)=1;
 finalmat=am;
-for i=1:10000
+for i=1:1000
 
     swf=zeros(nr_agents,2);
     spf=zeros(nr_agents,2);
@@ -37,10 +38,15 @@ for i=1:size(walls)
     wf=wf+F.*exp((r_i-d_iw)/(delta)).*e_iw+bodyFactor.*max(r_i-d_iw,0).*e_iw;
 
 end
+
+% [d_iw,e_iw]=test_walldistance(am(:,[1,2]),negativewall);
+
+% wf=wf-(+F.*exp((r_i-d_iw)/(delta)).*e_iw+bodyFactor.*max(r_i-d_iw,0).*e_iw);
+
     wf=wf.*am(:,9);
     swf=wf;    
 
-    dt=0.01;
+    dt=0.008;
     direc=znorm(pm(:,[6,7])-am(:,[1,2]));
 
     af=(pm(:,5).*direc-am(:,[5,6])).*pm(:,3)/acclTime;
@@ -62,9 +68,9 @@ function [dist,npw]=test_walldistance(point, wall)
     p0=wall(1,[1,2]);
     p1=wall(1,[3,4]);
     d=p1-p0;
-    ymp0=point-p0;
 
-    t=zdot(d,ymp0)./zdot(d,d);
+    ymp0=point-p0;
+    t=zdot(d,ymp0)./sqrt(zdot(d,d));
 
     if t <= 0.0
         dist = zmod(ymp0);
@@ -73,7 +79,7 @@ function [dist,npw]=test_walldistance(point, wall)
     elseif t >= 1.0
         ymp1 = point-p1;
         dist = zmod(ymp1);
-        cross = p0 + t.*d;
+        cross = p1 + t.*d;
 
     else
         cross = p0 + t.*d;
