@@ -6,7 +6,7 @@ bodyFactor=120000;
 F=2000;
 delta=0.08*50;
 
-% negativewall=[700 375 700 425];
+  negativewall=[700 375 700 425];
 time=0;
 am=pm; am(:,[5,6,7,8])=0;
 am(:,9)=1;
@@ -39,9 +39,9 @@ for i=1:size(walls)
 
 end
 
-% [d_iw,e_iw]=test_walldistance(am(:,[1,2]),negativewall);
+  [d_iw,e_iw]=test_walldistance(am(:,[1,2]),negativewall);
 
-% wf=wf-(+F.*exp((r_i-d_iw)/(delta)).*e_iw+bodyFactor.*max(r_i-d_iw,0).*e_iw);
+  wf=wf-(+F.*exp((r_i-d_iw)/(delta)).*e_iw+bodyFactor.*max(r_i-d_iw,0).*e_iw);
 
     wf=wf.*am(:,9);
     swf=wf;    
@@ -79,7 +79,7 @@ function [dist,npw]=test_walldistance(point, wall)
     elseif t >= 1.0
         ymp1 = point-p1;
         dist = zmod(ymp1);
-        cross = p1 + t.*d;
+        cross = p0 + t.*d;
 
     else
         cross = p0 + t.*d;
@@ -88,7 +88,7 @@ function [dist,npw]=test_walldistance(point, wall)
     end
     a=cross-point;
     npw = -a./zmod(a);
-
+% doubtful on direction of normal force from the wall when crowd is away from the edge
 end
 
 function zdot=zdot(a,b)
