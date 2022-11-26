@@ -6,12 +6,12 @@ bodyFactor=120000;
 F=2000;
 delta=0.08*50;
 
-  negativewall=[700 375 700 425];
+  % negativewall=[700 375 700 425];
 time=0;
 am=pm; am(:,[5,6,7,8])=0;
 am(:,9)=1;
 finalmat=am;
-for i=1:1000
+for i=1:10000
 
     [swf,spf,af]=deal(zeros(nr_agents,2));
 %     spf=zeros(nr_agents,2);
@@ -31,7 +31,7 @@ for j=1:nr_agents
 
     spf(j,:)=sum(pf);
 end
-    
+    spf;
     wf=swf;
 for i=1:size(walls)
     d_iw=zeros(nr_agents,1);
@@ -45,7 +45,7 @@ for i=1:size(walls)
 %     zt
 %     np
 %     [d_iw,e_iw]=test_walldistance(am(:,[1,2]),walls(i,:));
-    wf=wf+1*(+F.*exp((r_i-d_iw)/(delta)).*e_iw+bodyFactor.*max(r_i-d_iw,0).*e_iw);
+    wf=wf+1*(-F.*exp((r_i-d_iw)/(delta)).*e_iw+bodyFactor.*max(r_i-d_iw,0).*e_iw);
 	wf;
 end
 

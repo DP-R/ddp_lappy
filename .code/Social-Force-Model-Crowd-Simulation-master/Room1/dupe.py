@@ -240,11 +240,11 @@ def main():
             for agent_j in agents: 
                 if agent_i == agent_j: continue
                 people_interaction += agent_i.f_ij(agent_j)
-                print(agent_i.f_ij(agent_j))
-            print('pf:',people_interaction)
+                # print(agent_i.f_ij(agent_j))
+            # print('pf:\n',people_interaction)
             for wall in walls:
                 wall_interaction += agent_i.f_ik_wall(wall)
-            # print(wall_interaction)
+            print(wall_interaction)
             sumForce = aVelocity_force + people_interaction + wall_interaction
             # print(sumForce)
             dv_dt = sumForce/agent_i.mass

@@ -68,12 +68,12 @@ for j in range(0,nr_experiments):
                 agents_found += 1 
     
         positionmatrix.append([object_x, object_y, radius, mass, desiredS, nr_experiment])
-print('start\n\n')
+# print('start\n\n')
 for i in positionmatrix:
     # print('start')
-    # print(i)
-    [a,b]=distance_agent_to_wall([i[0],i[1]],[700, 375, 400, 425])
-    print(a,'\t',b)
+    print(i)
+    # [a,b]=distance_agent_to_wall([i[0],i[1]],[700, 375, 400, 425])
+    # print(a,'\t',b)
     # print('end\n\n')
 
 # print(positionmatrix[0])

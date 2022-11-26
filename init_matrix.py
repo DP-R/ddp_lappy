@@ -42,7 +42,7 @@ def wall2():
  
     return walls
 
-walls=wall2()
+walls=wall1()
 
 random.seed(123)
 nr_agents=100
