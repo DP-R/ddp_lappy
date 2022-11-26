@@ -45,7 +45,7 @@ def wall2():
 walls=wall2()
 
 random.seed(123)
-nr_agents=10
+nr_agents=100
 nr_experiments=1
 
 # positionmatrix=np.array([np.array([0,0]),0,0,0,np.array([]),0])

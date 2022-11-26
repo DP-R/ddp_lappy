@@ -13,9 +13,9 @@ am(:,9)=1;
 finalmat=am;
 for i=1:1000
 
-    swf=zeros(nr_agents,2);
-    spf=zeros(nr_agents,2);
-    af=zeros(nr_agents,2);
+    [swf,spf,af]=deal(zeros(nr_agents,2));
+%     spf=zeros(nr_agents,2);
+%     af=zeros(nr_agents,2);
 
 for j=1:nr_agents
     r_i=am(:,4);
@@ -38,7 +38,7 @@ for i=1:size(walls)
     e_iw=zeros(nr_agents,2);
     for p = 1:nr_agents
 %     disp('start')
-    [a,b]=test_walldistance(pm(p,[1,2]),[700,375,400,425]);
+    [a,b]=test_walldistance(pm(p,[1,2]),walls(i,:));
     d_iw(p)=a;
     e_iw(p,:)=b;
     end
@@ -56,7 +56,7 @@ end
     wf=wf.*am(:,9);
     swf=wf;   
 
-    dt=0.1;
+    dt=0.01;
     direc=znorm(pm(:,[6,7])-am(:,[1,2]));
 
     af=(pm(:,5).*direc-am(:,[5,6])).*pm(:,3)/acclTime;
