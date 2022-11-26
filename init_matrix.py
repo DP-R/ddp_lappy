@@ -45,7 +45,7 @@ def wall2():
 walls=wall2()
 
 random.seed(123)
-nr_agents=100
+nr_agents=10
 nr_experiments=1
 
 # positionmatrix=np.array([np.array([0,0]),0,0,0,np.array([]),0])
@@ -83,8 +83,8 @@ for j in range(0,nr_experiments):
          # found=True;agents_found+=1;
      # positionmatrix.append(np.array([pos, mass, radius, desiredS, dest, j+1]))
      positionmatrix=np.vstack([positionmatrix,[pos[0],pos[1],mass,radius,desiredS,dest[0],dest[1],j+1]])
-# for j in positionmatrix:
-#     print(j)
+for j in positionmatrix:
+    print(j)
 # np.savetxt('init_matrix_data',positionmatrix)
 # for i in positionmatrix:
     # print(i)

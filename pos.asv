@@ -35,18 +35,18 @@ end
     wf=swf;
 for i=1:size(walls)
     d_iw=zeros(nr_agents,1);
-    e_iw=zeros(nr_agents,2);
+    np=zeros(nr_agents,2);
     for p = 1:nr_agents
 %     disp('start')
-    [a,b]=test_walldistance(pm(p,[1,2]),[700,375,400,425]);
-    d_iw(p)=a;
-    e_iw(p,:)=b;
+    [a,b]=test_walldistance(pm(p,[1,2]),[700,375,400,425])
+    zt(p)=a;
+    np(p,:)=b;
     end
 %     zt
 %     np
-%     [d_iw,e_iw]=test_walldistance(am(:,[1,2]),walls(i,:));
+    [d_iw,e_iw]=test_walldistance(am(:,[1,2]),walls(i,:));
     wf=wf+1*(+F.*exp((r_i-d_iw)/(delta)).*e_iw+bodyFactor.*max(r_i-d_iw,0).*e_iw);
-	wf;
+	wf
 end
 
 % [d_iw,e_iw]=test_walldistance(am(:,[1,2]),negativewall);
@@ -56,7 +56,7 @@ end
     wf=wf.*am(:,9);
     swf=wf;   
 
-    dt=0.1;
+    dt=0.008;
     direc=znorm(pm(:,[6,7])-am(:,[1,2]));
 
     af=(pm(:,5).*direc-am(:,[5,6])).*pm(:,3)/acclTime;
@@ -82,24 +82,24 @@ function [dist,npw]=test_walldistance(point, wall)
     d=p1-p0;
 
     ymp0=point-p0;
-    t=zdot(d,ymp0)./zdot(d,d);
+    t=zdot(d,ymp0)./zmod(d);
 
     if t <= 0.0
         dist = zmod(ymp0);
-        cross = p0 + t.*d;
+        cross = p0 + t.*d/zmod(d);
 
     elseif t >= 1.0
         ymp1 = point-p1;
         dist = zmod(ymp1);
-        cross = p0 + t.*d;
+        cross = p0 + t.*d/zmod(d);
 
     else
-        cross = p0 + t.*d;
+        cross = p0 + t.*d/zmod(d);
         a=cross-point;
         dist = zmod(a);
     end
     a=cross-point;
-    npw = znorm(a);
+    npw = -a./zmod(a);
 %     disp(dist)
 %    disp(npw)
     % doubtful on direction of normal force from the wall when crowd is away from the edge
