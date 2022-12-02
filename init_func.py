@@ -11,8 +11,8 @@ def normalize(v):
        return v
     return v/norm
 
-# def g(x):    return np.max([x, 0])  
-def g(x): return np.absolute(x)+x
+def g(x):    return np.max([x, 0])  
+# def g(x): return np.absolute(x)+x
 
 def distance_agent_to_wall(point, wall):
     p0 = np.array([wall[0],wall[1]])
@@ -30,6 +30,6 @@ def distance_agent_to_wall(point, wall):
     else:
         cross = p0 + t*d
         dist = np.linalg.norm(cross-point)
-    # print(cross,point)
+
     npw = normalize(cross-point)
     return dist,npw

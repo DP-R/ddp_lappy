@@ -19,7 +19,10 @@ def wall1():
            [lb[0],lb[1],lt[0],lt[1]  ],
            [lt[0],lt[1],rt[0],rt[1]  ],
            [rb[0],rb[1],rb[0],ex[0]  ],
-           [rt[0],rt[1],rt[0],ex[1]  ]  ]
+           [rt[0],rt[1],rt[0],ex[1]  ]
+           # ,
+           # [rb[0],ex[0],rb[0],ex[1]  ]
+           ]
     return walls
 
 def wall2():
@@ -58,7 +61,7 @@ for j in range(0,nr_experiments):
      
      while found==False:
          countwall=0;
-         (desiredS,mass,radius,dest)=(20,80,12,np.array([700,400]))
+         (desiredS,mass,radius,dest)=(12,80,12,np.array([700,400]))
 
          # object_x=np.random.uniform(100,700);object_y=np.random.uniform(100,700);
          # pos=np.array([object_x,object_y])
@@ -83,8 +86,8 @@ for j in range(0,nr_experiments):
          # found=True;agents_found+=1;
      # positionmatrix.append(np.array([pos, mass, radius, desiredS, dest, j+1]))
      positionmatrix=np.vstack([positionmatrix,[pos[0],pos[1],mass,radius,desiredS,dest[0],dest[1],j+1]])
-for j in positionmatrix:
-    print(j)
+# for j in positionmatrix:
+#     print(j)
 # np.savetxt('init_matrix_data',positionmatrix)
 # for i in positionmatrix:
     # print(i)

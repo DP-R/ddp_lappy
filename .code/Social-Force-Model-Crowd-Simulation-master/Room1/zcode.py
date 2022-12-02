@@ -1,10 +1,5 @@
-# Programming evacuation systems using Crowd Simulation
-# Agent-Based Modelling
-# Loading the pygame package
 import pygame
-# Importing locals
 from pygame.locals import *
-# Other packages
 import sys
 import numpy as np
 import numpy.random as random
@@ -13,29 +8,19 @@ import time
 from zfunc import *
 from zdata import positionmatrix,nr_experiments,nr_agents
 
-#data_matrix = np.loadtxt('room1_r', dtype=float) # Enable after first run
 data_matrix = np.zeros((nr_experiments*nr_agents, 4)) # Delete/comment after first run
 
-# Making sure we can run experiments one by one
 j = 0 # add one after running
 
-# Checking if all are executed
 if j == nr_agents:
     print("nr of experiments reached")
     sys.exit()
 
-# Initializing Pygame and font
 pygame.init()
 pygame.font.init() 
 timefont = pygame.font.SysFont('Comic Sans MS', 30)
 
-""" 
 
-Creating a screen with a room that is smaller than then screen 
-
-"""
-
-# Size of the screen
 width = 800
 height = 800  
 size = width, height # Do not adjust this
