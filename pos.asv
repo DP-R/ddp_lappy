@@ -5,7 +5,7 @@ walls=double(walls);
 acclTime=0.5;
 bodyFactor=120000;
 F=2000;
-delta=0.08*20;
+delta=0.08*50;
 k=240000;
 
 % [acclTime,bodyFactor,F,delta]
@@ -15,7 +15,7 @@ am=pm; am(:,[5,6,7,8])=0;
 am(:,9)=1;
 finalmat=am;
 
-for i=1:5000
+for i=1:2
     af=actualforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm);
 % walls=[[100, 100, 700, 100]; [100, 700, 100, 100]; [100, 700, 700, 700]; [700, 100, 700, 382]; [700, 700, 700, 418]];
     swf=wallforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm,walls);
@@ -94,7 +94,8 @@ function spf= peopleforce(nr_agents,am,acclTime,bodyFactor,F,delta,k)
 
         mod_d_ij=zmod(d_ij);
         e_ij=d_ij./mod_d_ij;
-        t_ij=cross(e_ij,[0,0,1]);
+%         t_ij=cross(e_ij,[0,0,1]);
+        t_ij=[e_ij(2),-e_ij(1)];
         t_ij=t_ij(1:2);
         am_temp=(am(:,5)-am(:,6));
 

@@ -10,11 +10,11 @@ def wall1(box_size,exit_size):
     lb=[0,0];rb=[box_size,0];
     ex=[box_size/2-exit_size/2,box_size/2+exit_size/2]
 
-    lt=[x*1000/50+100 for x in lt]
-    lb=[x*1000/50+100 for x in lb]
-    rt=[x*1000/50+100 for x in rt]
-    rb=[x*1000/50+100 for x in rb]
-    ex=[x*1000/50+100 for x in ex]
+    lt=[x*50+100 for x in lt]
+    lb=[x*50+100 for x in lb]
+    rt=[x*50+100 for x in rt]
+    rb=[x*50+100 for x in rb]
+    ex=[x*50+100 for x in ex]
 
     walls=[[lb[0],lb[1],rb[0],rb[1]  ],
            [lb[0],lb[1],lt[0],lt[1]  ],
@@ -62,7 +62,7 @@ for j in range(0,nr_experiments):
      
      while found==False:
          countwall=0;
-         (desiredS,mass,radius,dest)=(12,80,12,np.array([box_size,box_size/2])*1000/50+100)
+         (desiredS,mass,radius,dest)=(12,80,12,np.array([box_size,box_size/2])*50+100)
 
          # object_x=np.random.uniform(100,700);object_y=np.random.uniform(100,700);
          # pos=np.array([object_x,object_y])

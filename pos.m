@@ -5,7 +5,7 @@ walls=double(walls);
 acclTime=0.5;
 bodyFactor=120000;
 F=2000;
-delta=0.08*20;
+delta=0.08*50;
 k=240000;
 
 % [acclTime,bodyFactor,F,delta]
@@ -15,7 +15,7 @@ am=pm; am(:,[5,6,7,8])=0;
 am(:,9)=1;
 finalmat=am;
 
-for i=1:2
+for i=1:5000
     af=actualforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm);
 % walls=[[100, 100, 700, 100]; [100, 700, 100, 100]; [100, 700, 700, 700]; [700, 100, 700, 382]; [700, 700, 700, 418]];
     swf=wallforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm,walls);
@@ -98,8 +98,8 @@ function spf= peopleforce(nr_agents,am,acclTime,bodyFactor,F,delta,k)
         t_ij=[e_ij(2),-e_ij(1)];
         t_ij=t_ij(1:2);
         am_temp=(am(:,5)-am(:,6));
-
-        pf=F.*exp((r_ij-mod_d_ij)/(delta)).*e_ij+bodyFactor.*max(r_ij-mod_d_ij,0).*e_ij+k*max(r_ij-mod_d_ij,0).*(am_temp(1)*t_ij(1)+am_temp(2)*t_ij(2)).*t_ij;
+% +k*max(r_ij-mod_d_ij,0).*(am_temp(1)*t_ij(1)+am_temp(2)*t_ij(2)).*t_ij
+        pf=F.*exp((r_ij-mod_d_ij)/(delta)).*e_ij+bodyFactor.*max(r_ij-mod_d_ij,0).*e_ij;
         pf(isnan(pf))=0;
         pf=pf.*am(:,9);
 
@@ -122,8 +122,8 @@ function swf= wallforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm,walls)
                 t_iw=t_iw(1:2);
 
                 am_temp=(am(:,5)-am(:,6));
-                
-                wf=wf+1*(-F.*exp((r_i-d_iw)/(delta)).*e_iw-bodyFactor.*max(r_i-d_iw,0).*e_iw+k*max(r_i-d_iw,0).*(am_temp(1)*t_iw(1)+am_temp(2)*t_iw(2)).*t_iw);
+% +k*max(r_i-d_iw,0).*(am_temp(1)*t_iw(1)+am_temp(2)*t_iw(2)).*t_iw
+                wf=wf+1*(-F.*exp((r_i-d_iw)/(delta)).*e_iw-bodyFactor.*max(r_i-d_iw,0).*e_iw);
             end
         swf(i,:)=wf;
     end
