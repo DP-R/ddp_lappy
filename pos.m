@@ -5,9 +5,9 @@ walls=double(walls);
 acclTime=0.5;
 bodyFactor=120000;
 F=2000;
-delta=0.08*50;
+delta=0.08;
 k=240000;
-
+pm(:,5)=1
 % [acclTime,bodyFactor,F,delta]
   % negativewall=[700 375 700 425];
 time=0;
@@ -15,20 +15,22 @@ am=pm; am(:,[5,6,7,8])=0;
 am(:,9)=1;
 finalmat=am;
 
-for i=1:5000
+for i=1:10000
     af=actualforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm);
 % walls=[[100, 100, 700, 100]; [100, 700, 100, 100]; [100, 700, 700, 700]; [700, 100, 700, 382]; [700, 700, 700, 418]];
     swf=wallforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm,walls);
     spf=peopleforce(nr_agents,am,acclTime,bodyFactor,F,delta,k);
     
-    dt=0.5/20;
+    dt=0.1;
 % am=[posx,posy,mass,radius*50,velx,vely,time,nr_agent,goal_check]
     am(:,[5,6])=am(:,[5,6])+(af+spf+swf)./pm(:,3)*dt;
     am(:,[1,2])=am(:,[1,2])+am(:,[5,6]).*dt;
     time=time+dt;
     am(:,7)=time;
     am(:,8)=[1:nr_agents];
-    am(:,9)=(am(:,1)<700);
+    am(:,9)=(am(:,1)<15);
+    numberOfZeros = sum(am(:,9)==0)
+
     if am(:,9)==0
         break
     end
@@ -37,6 +39,7 @@ for i=1:5000
         % insert tunnel and update positions
     % 
     finalmat=[finalmat;am];
+%     time
 end
 
 save('finalmat.mat','finalmat')

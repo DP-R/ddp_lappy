@@ -1,8 +1,8 @@
 import numpy as np
 import numpy.random as random
 import math,time
-import pygame
-from pygame.locals import *
+# import pygame
+# from pygame.locals import *
 import sys,os, pickle
 
 def normalize(v):
