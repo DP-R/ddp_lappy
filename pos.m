@@ -7,7 +7,7 @@ bodyFactor=120000;
 F=2000;
 delta=0.08;
 k=240000;
-pm(:,5)=1
+pm(:,5)=1;
 % [acclTime,bodyFactor,F,delta]
   % negativewall=[700 375 700 425];
 time=0;
@@ -17,11 +17,10 @@ finalmat=am;
 
 for i=1:10000
     af=actualforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm);
-% walls=[[100, 100, 700, 100]; [100, 700, 100, 100]; [100, 700, 700, 700]; [700, 100, 700, 382]; [700, 700, 700, 418]];
+%     swf=zeros(nr_agents,2);
     swf=wallforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm,walls);
     spf=peopleforce(nr_agents,am,acclTime,bodyFactor,F,delta,k);
-    
-    dt=0.1;
+    dt=0.05;
 % am=[posx,posy,mass,radius*50,velx,vely,time,nr_agent,goal_check]
     am(:,[5,6])=am(:,[5,6])+(af+spf+swf)./pm(:,3)*dt;
     am(:,[1,2])=am(:,[1,2])+am(:,[5,6]).*dt;
@@ -29,7 +28,7 @@ for i=1:10000
     am(:,7)=time;
     am(:,8)=[1:nr_agents];
     am(:,9)=(am(:,1)<15);
-    numberOfZeros = sum(am(:,9)==0)
+%     numberOfZeros = sum(am(:,9)==0)
 
     if am(:,9)==0
         break
@@ -52,21 +51,16 @@ function [dist,npw]=test_walldistance(point, wall)
     ymp0=point-p0;
     t=zdot(d,ymp0)./zdot(d,d);
 
-    if t <= 0.0
-        dist = zmod(ymp0);
+    if t>=0 && t<=1
         cross = p0 + t.*d;
-
-    elseif t >= 1.0
-        ymp1 = point-p1;
-        dist = zmod(ymp1);
-        cross = p0 + t.*d;
-
+    elseif t>1
+        cross=p1;
     else
-        cross = p0 + t.*d;
-        a=cross-point;
-        dist = zmod(a);
+        cross=p0;
     end
     a=cross-point;
+    dist = zmod(a);
+    
     npw = znorm(a);
 %     table(point,wall,dist,npw)
 %     disp(dist)
@@ -121,10 +115,10 @@ function swf= wallforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm,walls)
 
             for j=1:size(walls)
                 [d_iw,e_iw]=test_walldistance(am(i,[1,2]),walls(j,:));
-                t_iw=cross([e_iw,0],[0,0,1]);
-                t_iw=t_iw(1:2);
+%                 t_iw=cross([e_iw,0],[0,0,1]);
+%                 t_iw=t_iw(1:2);
 
-                am_temp=(am(:,5)-am(:,6));
+%                 am_temp=(am(:,5)-am(:,6));
 % +k*max(r_i-d_iw,0).*(am_temp(1)*t_iw(1)+am_temp(2)*t_iw(2)).*t_iw
                 wf=wf+1*(-F.*exp((r_i-d_iw)/(delta)).*e_iw-bodyFactor.*max(r_i-d_iw,0).*e_iw);
             end
@@ -137,7 +131,6 @@ end
 function af = actualforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm)
     af=zeros(nr_agents,2);
     direc=znorm(pm(:,[6,7])-am(:,[1,2]));
-
     af=(pm(:,5).*direc-am(:,[5,6])).*pm(:,3)/acclTime;
     af=af.*am(:,9);
 

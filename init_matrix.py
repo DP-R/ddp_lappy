@@ -49,7 +49,7 @@ def wall2():
 
 walls=wall1(box_size,exit_size)
 random.seed(123)
-nr_agents=200
+nr_agents=100
 nr_experiments=1
 
 # positionmatrix=np.array([np.array([0,0]),0,0,0,np.array([]),0])
