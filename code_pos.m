@@ -1,51 +1,59 @@
-load('positionmatrix.mat')
+load('rawop/mat_init_pos.mat')
 pm=positionmatrix;pm=cell2mat(pm);
 walls=double(walls);
-
-sizer=size(pm);
-nr_agents=sizer(1); 
+walls=[walls;[15 7 30 7];[15 8 30 8]];
+nr_agents=size(pm,1);
 acclTime=0.5;
 bodyFactor=120000;
 F=2000;
 delta=0.08;
 k=240000;
 given_param=struct('ip',{acclTime,bodyFactor,F,delta,k,walls,nr_agents,pm});
-% obj_param=struct('obj',{pos,disp});
 
+iter=1
+dt=0.1
 walltestmat=[0,0];
 veltestmat=[0,0];
-pm(:,5)=0.8;
+pm(:,5)=0.8; 
 
 % for veltest=2.5:0.5:5
-for walltest=12:-0.1:0.5
-    walls(4,4)=7.5-walltest/2;
-    walls(5,4)=7.5+walltest/2;
+% for walltest=12:-0.1:0.5
+%     walls(4,4)=7.5-walltest/2;
+%     walls(5,4)=7.5+walltest/2;
 
 %     negwall=[15 7-5-walltest/2 15 7.5+walltest/2];
 %     pm(:,5)=veltest;
-    finalmat=matcalc(given_param,iter,dt)
-    save(['finalmatwall' num2str(walltest) '.mat'],'finalmat')
+    mat_pos=matcalc(given_param,iter,dt);
+    save('rawop/mat_pos.mat','mat_pos')
+%     save(['finalmatwall' num2str(walltest) '.mat'],'finalmat')
 %       save(['finalmatvel' num2str(veltest) '.mat'],'finalmat')
 %       veltestmat=[veltestmat;veltest,time]
 %     walls
-    walltestmat=[walltestmat;walltest,time]
-end
+%     walltestmat=[walltestmat;walltest,time]
+% end
 % save('finalmat.mat','finalmat')
 
-function finalmat=matcalc(given_param,iter,dt)
+% am=[posx,posy,mass,radius*50,velx,vely,time,nr_agent,goal_check]
+function mat_pos=matcalc(given_param,iter,dt)
    [acclTime,bodyFactor,F,delta,k,walls,nr_agents,pm]=given_param.ip;
     time=0;
     am=pm; am(:,[5,6,7,8])=0;
-    am(:,9)=1;
-    finalmat=am;
+    am(:,9)=1;am(:,10)=0;
+    mat_pos=am;
+
+    mat_wf_x=zeros(nr_agents,size(walls,1));mat_wf_y=mat_wf_x;
+    mat_pf_x=zeros(nr_agents,nr_agents);mat_pf_y=mat_pf_x;
+
     for i=1:iter
         af=actualforce(given_param,am);
-        swf=wallforce(given_param,am);
-    %     swf=swf-wallforce(nr_agents,am,acclTime,bodyFactor,F,delta,k,pm,negwall);
-        spf=peopleforce(given_param,am);
-        % dt=0.05;
+        [wf_x,wf_y]=wallforce(given_param,am);  swf=[sum(wf_x,2) sum(wf_y,2)];
+        [pf_x,pf_y]=peopleforce(given_param,am);spf=[sum(pf_x,2) sum(pf_y,2)];
 
-    % am=[posx,posy,mass,radius*50,velx,vely,time,nr_agent,goal_check]
+        mat_wf_x=[mat_wf_x;wf_x];
+        mat_wf_y=[mat_wf_y;wf_y];
+        mat_pf_x=[mat_pf_x;pf_x];
+        mat_pf_y=[mat_pf_y;pf_y];
+
         change=(af+spf+swf)./pm(:,3)*dt;
         change(change>2)=0;
         am(:,[5,6])=am(:,[5,6])+change;
@@ -53,21 +61,19 @@ function finalmat=matcalc(given_param,iter,dt)
         time=time+dt;
         am(:,7)=time;
         am(:,8)=[1:nr_agents];
-        am(:,9)=(am(:,1)<15 & am(:,1)>0 & am(:,2)<15 & am(:,2)>0);
+%         modify this
+        am(:,9)=(am(:,1)<15 & am(:,1)>0 & am(:,2)<30 & am(:,2)>0);
     %     numberOfZeros = sum(am(:,9)==0)
 
         if am(:,9)==0
             break
         end
 
-        % 
-            % insert tunnel and update positions
-        % 
-        finalmat=[finalmat;am];
-    %     time
+        mat_pos=[mat_pos;am];
     end
-
+save('rawop/mat_force.mat','mat_wf_x','mat_wf_y','mat_pf_x','mat_pf_y')
 end
+
 function [dist,npw]=test_walldistance(point, wall)
     p0=wall(1,[1,2]);
     p1=wall(1,[3,4]);
@@ -109,15 +115,16 @@ function spldot=spldot(a,b)
     spldot=a(1,1).*b(:,1)+a(1,2).*b(:,2);
 end
 
-function spf= peopleforce(given_param,am)
+function [pf_x,pf_y]= peopleforce(given_param,am)
    [acclTime,bodyFactor,F,delta,k,walls,nr_agents,pm]=given_param.ip;
-    spf=zeros(nr_agents,2);
+    pf_x=zeros(nr_agents,nr_agents);
+    pf_y=zeros(nr_agents,nr_agents);
     for i=1:nr_agents
         pf=zeros(1,2);
         r_i=am(i,4);
         d_i=am(i,[1,2]);
 
-        for j=1:nr_agents
+        for j=i:nr_agents
             r_ij=r_i+am(j,4);
             d_ij=d_i-am(j,1:2);
 
@@ -131,17 +138,21 @@ function spf= peopleforce(given_param,am)
             pf(isnan(pf))=0;
             pf=pf.*am(i,9);
 
-            spf(i,:)=spf(i,:)+(pf);
+            pf_x(i,j)=pf(1);
+            pf_y(i,j)=pf(2);
         end
     end
-    spf;
+    pf_x=pf_x-pf_x';
+    pf_y=pf_y-pf_y';
+%     spf;
 
 end
 
-function swf= wallforce(given_param,am)
+function [wf_x,wf_y]= wallforce(given_param,am)
    [acclTime,bodyFactor,F,delta,k,walls,nr_agents,pm]=given_param.ip;
-
-    swf=zeros(nr_agents,2);
+    wf_x=zeros(nr_agents,size(walls,1));
+    wf_y=zeros(nr_agents,size(walls,1));
+%     swf=zeros(nr_agents,2);
     for i=1:nr_agents
         wf=zeros(1,2);
         r_i=am(i,4);
@@ -155,17 +166,26 @@ function swf= wallforce(given_param,am)
                 wf(isnan(wf))=0;
                 wf=wf.*am(i,9);
 
-                swf(i,:)=swf(i,:)+wf;
+                wf_x(i,j)=wf(1);
+                wf_y(i,j)=wf(2);
             end
     end
 
 end
 
-function af = actualforce(given_param,am)
+function af_xy = actualforce(given_param,am)
    [acclTime,bodyFactor,F,delta,k,walls,nr_agents,pm]=given_param.ip;
-    af=zeros(nr_agents,2);
-    direc=znorm(pm(:,[6,7])-am(:,[1,2]));
-    af=(pm(:,5).*direc-am(:,[5,6])).*pm(:,3)/acclTime;
-    af=af.*am(:,9);
-
+   af_xy=zeros(nr_agents,2); 
+   af=zeros(1,2);
+    for i=1:nr_agents
+        direc=znorm(pm(i,[6,7])-am(i,[1,2]));
+        af=(pm(i,5).*direc-am(i,[5,6])).*pm(i,3)/acclTime;
+%         blindcheck
+        if am(i,10)==1
+            af(i,1)=0;
+        end
+      
+        af=af.*am(i,9);
+        af_xy(i,:)=af;
+    end
 end

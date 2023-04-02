@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from init_func import *
+from code_init_func import *
 import pickle
 
 box_size=15;
@@ -99,11 +99,11 @@ for j in range(0,nr_experiments):
 #     for i in positionmatrix:
 #         f.write(f"{i}\n")
 
-with open('init_matrix_data.pkl', 'wb') as file:
+# with open('rawop/init_matrix_data.pkl', 'wb') as file:
       
     # A new file will be created
-    pickle.dump(positionmatrix, file)
+    # pickle.dump(positionmatrix, file)
 
 import scipy.io as sio
-sio.savemat('positionmatrix.mat',{'positionmatrix':positionmatrix,'walls':walls,'nr_agents':nr_agents})
+sio.savemat('rawop/mat_init_pos.mat',{'positionmatrix':positionmatrix,'walls':walls,'nr_agents':nr_agents})
 
