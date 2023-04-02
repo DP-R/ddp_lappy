@@ -20,7 +20,9 @@ def wall1(box_size,exit_size):
            [lb[0],lb[1],lt[0],lt[1]  ],
            [lt[0],lt[1],rt[0],rt[1]  ],
            [rb[0],rb[1],rb[0],ex[0]  ],
-           [rt[0],rt[1],rt[0],ex[1]  ]
+           [rt[0],rt[1],rt[0],ex[1]  ],
+           [rb[0],ex[0],rb[0]+rb[0],ex[0]],
+           [rt[0],ex[1],rt[0]+rt[0],ex[1]]
            # ,
            # [rb[0],ex[0],rb[0],ex[1]  ]
            ]
@@ -49,7 +51,7 @@ def wall2():
 
 walls=wall1(box_size,exit_size)
 random.seed(123)
-nr_agents=100
+nr_agents=10
 nr_experiments=1
 
 # positionmatrix=np.array([np.array([0,0]),0,0,0,np.array([]),0])
